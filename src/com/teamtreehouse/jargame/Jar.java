@@ -19,7 +19,7 @@ public class Jar {
     }
 
     public void setMaxAmount() {
-        System.out.printf("Please enter the max amount of %s to be put in the jar:%n",mItemName);
+        System.out.printf("Please enter the max amount of %s to be put in the jar:%n", mItemName);
         try {
             mItemMaxAmount = Integer.parseInt(br.readLine());
         } catch (IOException e) {
@@ -34,4 +34,6 @@ public class Jar {
     public int getMaxAmount() {
         return mItemMaxAmount;
     }
+
+
 }
