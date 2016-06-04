@@ -30,7 +30,6 @@ public class UserList {
     }
 
     public void exportList(String fileName) {
-        System.out.println("Saving users and high scores...");
         try (
                 FileOutputStream fos = new FileOutputStream(fileName);
                 PrintWriter writer = new PrintWriter(fos);
@@ -45,4 +44,9 @@ public class UserList {
             ioe.printStackTrace();
         }
     }
+
+    public List<User> getUserList(){
+        return userList;
+    }
+
 }

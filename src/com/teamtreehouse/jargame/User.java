@@ -4,9 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-/**
- * Created by Shadd Anderson on 6/3/2016.
- */
 public class User {
     private String name;
     private int highScore;
