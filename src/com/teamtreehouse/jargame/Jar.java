@@ -29,8 +29,43 @@ public class Jar {
         return mItemName;
     }
 
+    private void setName(String name) {
+        mItemName = name;
+    }
+
     public int getMaxAmount() {
         return mItemMaxAmount;
     }
 
+    private void setMaxAmount(int amount) {
+        mItemMaxAmount = amount;
+    }
+
+    public void importJar(String fileName) {
+        try (
+                FileInputStream fis = new FileInputStream(fileName);
+                BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+        ) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] args = line.split("\\|");
+                setName(args[0]);
+                setMaxAmount(Integer.parseInt(args[1]));
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    public void exportJar(String fileName) {
+        try (
+                FileOutputStream fos = new FileOutputStream(fileName);
+                PrintWriter writer = new PrintWriter(fos);
+        ) {
+            writer.printf("%s|%d", getName(), getMaxAmount());
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
 }
+
