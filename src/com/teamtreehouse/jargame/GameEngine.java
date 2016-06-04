@@ -90,7 +90,7 @@ public class GameEngine {
             System.out.println("No jar has been set up yet!");
             setUpJar();
         }
-        String choice = "";
+        String choice;
         do {
             choice = promptMainMenuChoice();
             switch (choice) {
@@ -178,7 +178,7 @@ public class GameEngine {
 
     private void playerMenuSwitch() {
         User user = selectUser();
-        String choice = "";
+        String choice;
         do {
             choice = promptPlayerChoice(user);
             switch (choice) {

@@ -30,6 +30,7 @@ public class UserList {
         }
     }
 
+    @SuppressWarnings("MalformedFormatString")
     public void exportList(String fileName) {
         try (
                 FileOutputStream fos = new FileOutputStream(fileName);
