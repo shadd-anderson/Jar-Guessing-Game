@@ -9,6 +9,7 @@ When you first play the game, it will be a little complicated to get set up. How
 easy to run it again.
 
 ***To first set up the game:***
+
 1.	Download the full src folder, keep note of the location (something like C:\Users\User one\Downloads).
 2.	Open a command prompt. (Make sure to run it as an administrator, otherwise will not work).
 3.	Type the prompt "java -version" into the command prompt and make note of the version number.
@@ -26,7 +27,8 @@ easy to run it again.
 ***When you first run it, it will come up with a long error message. Ignore everything except the bottom two lines.***
 
 After you finish all this, if you ever want to run the game again, do the following:
-1.   	Open a command prompt.
+
+1.	Open a command prompt.
 2.	Type the prompt "cd *location*\src" with *location* being the location of the src folder
      	(You will have to put quote marks around any folder that has a space in its name, eg: C:\Users\"User one"\)
 3.	Type the prompt "java com.teamtreehouse.jargame.Game"
