@@ -5,10 +5,11 @@ The jar requires two things: an item to be put in it, and a max amount to put in
 A new, random jar will be produced every game, with any number of items between 0 and the max number specified in the jar.
 Your job is to guess how much is in the jar in the least amount of guesses. Good luck!
 
-When you first play the game, it will be a little complicated to get set up. However, once it's set up, it's really
-easy to run it again.
+When you first play the game, it will be a little complicated to get set up if you don't have an IDE. However, once it's set up, it's really easy to run it again.
 
 ***To first set up the game:***
+
+**If you have an IDE, just import the folder and run it. The main class is in "Game.java"**
 
 1.	Download the full src folder, keep note of the location (something like C:\Users\User one\Downloads).
 2.	Open a command prompt. (Make sure to run it as an administrator, otherwise will not work).
