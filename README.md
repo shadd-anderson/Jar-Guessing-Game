@@ -9,7 +9,7 @@ When you first play the game, it will be a little complicated to get set up if y
 
 ***To first set up the game:***
 
-**If you have an IDE, just import the folder and run it. The main class is in "Game.java"**
+**If you have an IDE, just import the folder and run it. The main class is in "Game.java". If not, follow these instructions:**
 
 1.	Download the full src folder, keep note of the location (something like C:\Users\User one\Downloads).
 2.	Open a command prompt. (Make sure to run it as an administrator, otherwise will not work).
