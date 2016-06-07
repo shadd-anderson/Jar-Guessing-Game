@@ -1,9 +1,5 @@
 package com.teamtreehouse.jargame;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 public class User {
     private String name;
     private int highScore;
@@ -15,16 +11,6 @@ public class User {
 
     public String getName() {
         return name;
-    }
-
-    public void setName() {
-        System.out.println("Please enter your first name:");
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        try {
-            name = br.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public int getHighScore() {

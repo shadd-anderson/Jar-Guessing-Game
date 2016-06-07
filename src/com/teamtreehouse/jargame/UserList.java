@@ -5,14 +5,14 @@ import java.io.*;
 import java.util.*;
 
 public class UserList {
-    private List<User> mUserList;
+    private Map<String, Integer> mUserList;
 
     public UserList() {
-        mUserList = new ArrayList<>();
+        mUserList = new HashMap<>();
     }
 
     public void addUser(User user) {
-        mUserList.add(user);
+        mUserList.put(user.getName(), user.getHighScore());
     }
 
     public void importList(String fileName) {
@@ -25,6 +25,8 @@ public class UserList {
                 String[] args = line.split("\\|");
                 addUser(new User(args[0], Integer.parseInt(args[1])));
             }
+        } catch (FileNotFoundException e) {
+            System.out.printf("Could not find file name \"%s\". A new file will be created after safely closing this game.%n",fileName);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -36,7 +38,7 @@ public class UserList {
                 FileOutputStream fos = new FileOutputStream(fileName);
                 PrintWriter writer = new PrintWriter(fos);
         ) {
-            for (Map.Entry user : usersWithHiScores(mUserList).entrySet()) {
+            for (Map.Entry user : mUserList.entrySet()) {
                 writer.printf("%s|%d%n",
                         user.getKey(),
                         user.getValue());
@@ -47,20 +49,10 @@ public class UserList {
         }
     }
 
-    public List<User> getUserList() {
+    public Map<String, Integer> getUserList() {
         return mUserList;
     }
 
-    public Map<String, Integer> usersWithHiScores(List<User> userList) {
-        Map<String, Integer> usersAndHiScores = new HashMap<>();
-        for (User user : userList) {
-            usersAndHiScores.put(user.getName(), user.getHighScore());
-        }
-        return usersAndHiScores;
-    }
-
-    //HUGE shoutout to Carter Page on stackoverflow.com for posting the way to do this:
-    //Check out his page at http://stackoverflow.com/users/309596/carter-page.
     public Map<String, Integer> leaderboard(Map<String, Integer> userList) {
         List<Map.Entry<String, Integer>> listOfUsers = new LinkedList<>(userList.entrySet());
         Collections.sort(listOfUsers, new Comparator<Map.Entry<String, Integer>>() {
@@ -74,6 +66,10 @@ public class UserList {
             sortedLeaderboard.put(entry.getKey(), entry.getValue());
         }
         return sortedLeaderboard;
+    }
+
+    public void removeUser(String name) {
+        mUserList.remove(name);
     }
 
 }

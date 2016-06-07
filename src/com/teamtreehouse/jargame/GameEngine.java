@@ -8,13 +8,14 @@ import java.util.Map;
 import java.util.Random;
 
 public class GameEngine {
+    private static Jar jar = new Jar();
+    private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private UserList userList;
-    private Jar jar = new Jar();
     private Map<String, String> gameMenu;
     private Map<String, String> adminMenu;
     private Map<String, String> playerMenu;
-    private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
+    //Defines the various menu choices
     public GameEngine(UserList userList) {
         this.userList = userList;
         gameMenu = new HashMap<>();
@@ -26,31 +27,42 @@ public class GameEngine {
         adminMenu.put("1", "Change the name of the item");
         adminMenu.put("2", "Change the max amount of the item");
         adminMenu.put("3", "View players and high scores");
-        adminMenu.put("4", "Go to users menu");
-        adminMenu.put("5", "Go back to the main menu");
+        adminMenu.put("4", "Delete a player");
+        adminMenu.put("5", "Go to users menu");
+        adminMenu.put("6", "Go back to the main menu");
         playerMenu.put("1", "Start guessing and try to beat your high score");
         playerMenu.put("2", "View your current high score");
         playerMenu.put("3", "Change users");
         playerMenu.put("4", "Go back to the main menu");
     }
 
-    private void enter(){
-        System.out.printf("%n%nPlease press enter to continue.");
+    public static String readLine() {
+        String line = "";
         try {
-            br.readLine();
+            line = br.readLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return line;
     }
 
-    private String choiceExceptionCatcher() {
-        String choice = "";
+    public static int choiceToInt() {
+        int guess = 0;
         try {
-            choice = br.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
+            guess = Integer.parseInt(readLine().replaceAll("[\\D]", ""));
+        } catch (NumberFormatException nfe) {
+            System.out.println("That's not a number!");
         }
-        return choice.trim().toLowerCase();
+        return guess;
+    }
+
+    private void enter() {
+        System.out.println("Please press enter to continue");
+        readLine();
+    }
+
+    private String choiceTrimmer() {
+        return readLine().trim().toLowerCase();
     }
 
     private String promptMainMenuChoice() {
@@ -59,8 +71,8 @@ public class GameEngine {
             System.out.printf("%s. %s %n", option.getKey(), option.getValue());
         }
         System.out.println();
-        System.out.print("So? Who are ya? (Please enter the number)");
-        return choiceExceptionCatcher();
+        System.out.println("So? Who are ya? (Please enter the number)");
+        return choiceTrimmer();
     }
 
     private String promptPlayerChoice(User user) {
@@ -69,19 +81,19 @@ public class GameEngine {
             System.out.printf("%s: %s%n", option.getKey(), option.getValue());
         }
         System.out.println();
-        System.out.print("What would you like to do? (Type the number): ");
-        return choiceExceptionCatcher();
+        System.out.println("What would you like to do? (Type the number): ");
+        return choiceTrimmer();
     }
 
     private String promptAdminChoice() {
         System.out.printf("%n%nWelcome, administrator! The current jar is filled with a max of %d %s. Here's what you can do:%n",
-                        jar.getMaxAmount(), jar.getName());
+                jar.getMaxAmount(), jar.getName());
         for (Map.Entry<String, String> option : adminMenu.entrySet()) {
             System.out.printf("%s: %s %n", option.getKey(), option.getValue());
         }
         System.out.println();
-        System.out.print("What would you like to do? (Type the number): ");
-        return choiceExceptionCatcher();
+        System.out.println("What would you like to do? (Type the number): ");
+        return choiceTrimmer();
     }
 
     public void run() {
@@ -105,7 +117,7 @@ public class GameEngine {
                     jar.exportJar("Jar");
                     break;
                 default:
-                    System.out.printf("Whoops! Looks like you chose an option that's not available." +
+                    System.out.printf("Whoops! Looks like you chose an option that's not available. " +
                             "Make sure you type the number of the choice you would like.%n%n");
             }
         } while (!choice.equals("3"));
@@ -117,14 +129,14 @@ public class GameEngine {
             choice = promptAdminChoice();
             switch (choice) {
                 case "1":
-                    System.out.printf("The current jar is filled with %s.%n",jar.getName());
+                    System.out.printf("The current jar is filled with %s.%n", jar.getName());
                     jar.setName();
-                    System.out.printf("Item changed to %s!%n%n", jar.getName());
+                    System.out.printf("Item changed to %s.%n%n", jar.getName());
                     enter();
                     break;
                 case "2":
                     if (jar.getName() != null) {
-                        System.out.printf("The current jar has a max of %d %s.%n",jar.getMaxAmount(),jar.getName());
+                        System.out.printf("The current jar has a max of %d %s.%n", jar.getMaxAmount(), jar.getName());
                         jar.setMaxAmount();
                         System.out.printf("Max amount of %s changed to %d.%n%n", jar.getName(), jar.getMaxAmount());
                     } else {
@@ -136,44 +148,67 @@ public class GameEngine {
                     break;
                 case "3":
                     System.out.println("Here is the high score leaderboard:");
-                    for (Map.Entry<String, Integer> entry : userList.leaderboard(userList.usersWithHiScores(userList.getUserList())).entrySet()) {
+                    for (Map.Entry<String, Integer> entry : userList.leaderboard(userList.getUserList()).entrySet()) {
                         if (entry.getValue() != -1) {
                             System.out.printf("%s ------ %d%n", entry.getKey(), entry.getValue());
+                        } else {
+                            System.out.printf("%s has signed up but has not played yet.%n", entry.getKey());
                         }
                     }
                     enter();
                     break;
                 case "4":
-                    playerMenuSwitch();
+                    System.out.println("Please enter the name of the player you would like to delete:");
+                    String name = readLine();
+                    if (userList.getUserList().containsKey(name)) {
+                        System.out.printf("Are you sure you'd like to delete %s?%n", name);
+                        System.out.println("Please type 'yes' if you are sure. If not, please type 'no'.");
+                        String confirmation = choiceTrimmer();
+                        do {
+                            switch (confirmation) {
+                                case "yes":
+                                    System.out.println("Please wait.....");
+                                    userList.removeUser(name);
+                                    System.out.printf("%s deleted!%n", name);
+                                    break;
+                                case "no":
+                                    System.out.println("Returning to admin menu");
+                                    break;
+                                default:
+                                    System.out.println("Please enter either 'yes' or 'no'");
+                            }
+                        } while (!confirmation.equals("yes") && !confirmation.equals("no"));
+                    } else {
+                        System.out.printf("User %s does not exist! Please enter a valid user. (Usernames are case-sensitive)", name);
+                    }
+                    enter();
                     break;
                 case "5":
+                    playerMenuSwitch();
+                    break;
+                case "6":
                     System.out.printf("Thanks!%n%n");
                     break;
                 default:
                     System.out.printf("Whoops! Looks like you chose an option that's not available." +
                             "Make sure you type the number of the choice you would like.%n%n");
             }
-        } while (!choice.equals("4") && !choice.equals("5"));
+        } while (!choice.equals("6") && !choice.equals("5"));
 
     }
 
     private User selectUser() {
         System.out.printf("%n%nThe following players have already signed up to play:%n");
-        for (User player : userList.getUserList()) {
-            System.out.printf("%s%n", player.getName());
+        for (Map.Entry player : userList.getUserList().entrySet()) {
+            System.out.printf("%s%n", player.getKey());
         }
-        System.out.printf("%nPlease enter your name:");
-        String name = "";
-        try {
-            name = br.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (!userList.usersWithHiScores(userList.getUserList()).containsKey(name)) {
+        System.out.printf("%nPlease enter your name: (Usernames are case-sensitive)%n");
+        String name = readLine();
+        if (!userList.getUserList().containsKey(name)) {
             userList.addUser(createUser(name));
             userList.exportList("Users");
         }
-        return new User(name, userList.usersWithHiScores(userList.getUserList()).get(name));
+        return new User(name, userList.getUserList().get(name));
     }
 
     private void playerMenuSwitch() {
@@ -185,7 +220,6 @@ public class GameEngine {
                 case "1":
                     user.setHighScore(startGuessing(user));
                     userList.addUser(user);
-                    userList.usersWithHiScores(userList.getUserList()).put(user.getName(), user.getHighScore());
                     enter();
                     break;
                 case "2":
@@ -202,7 +236,7 @@ public class GameEngine {
                     break;
                 case "4":
                     System.out.printf("I hope you had fun!%n%n");
-                    userList.usersWithHiScores(userList.getUserList()).put(user.getName(), user.getHighScore());
+                    userList.addUser(user);
                     break;
                 default:
                     System.out.printf("Whoops! Looks like you chose an option that's not available." +
@@ -218,17 +252,18 @@ public class GameEngine {
 
     public int startGuessing(User user) {
         Random random = new Random();
-        int number = random.nextInt(jar.getMaxAmount());
+        int number = random.nextInt(jar.getMaxAmount() - 1) + 1; //This causes the number to never be 0
         int guess = 0;
         int numberOfGuesses = 0;
         System.out.printf("Try to guess how many %s are in the jar! (There is a max of %d)%n", jar.getName(), jar.getMaxAmount());
         do {
-            try {
-                System.out.printf("Guess: ");
-                guess = Integer.parseInt(br.readLine());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            do {
+                System.out.print("Guess: ");
+                guess = choiceToInt();
+                if (guess == 0) {
+                    System.out.printf("Please enter a valid number between 1 and %s.%n", jar.getMaxAmount());
+                }
+            } while (guess == 0);
             if (guess <= jar.getMaxAmount()) {
                 numberOfGuesses++;
                 if (guess != number) {
@@ -245,7 +280,13 @@ public class GameEngine {
         } while (guess != number);
         System.out.printf("That's correct! There were %d %s in the jar. It only took you %d guess(es)!%n", number, jar.getName(), numberOfGuesses);
         if (numberOfGuesses < user.getHighScore() || user.getHighScore() == -1) {
-            System.out.println("You set a new high score!");
+            System.out.println("You set a new personal high score!");
+            if (numberOfGuesses <= (int) userList.leaderboard(userList.getUserList()).values().toArray()[0]
+                    || ((int) userList.leaderboard(userList.getUserList()).values().toArray()[0]) == -1) {
+                System.out.println("You set a new global high score!");
+            } else {
+                System.out.println("Unfortunately, however, this did not beat the global high score. Try again!");
+            }
             return numberOfGuesses;
         } else {
             System.out.printf("Unfortunately this did not beat your old high score of %d. Try again!%n", user.getHighScore());
@@ -256,4 +297,5 @@ public class GameEngine {
     public User createUser(String name) {
         return new User(name, -1);
     }
+
 }

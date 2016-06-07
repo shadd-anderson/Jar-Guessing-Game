@@ -5,24 +5,15 @@ import java.io.*;
 public class Jar {
     private String mItemName;
     private int mItemMaxAmount;
-    private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     public void setName() {
         System.out.println("Please enter the item to be put in the jar:");
-        try {
-            mItemName = br.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mItemName = GameEngine.readLine();
     }
 
     public void setMaxAmount() {
         System.out.printf("Please enter the max amount of %s to be put in the jar:%n", mItemName);
-        try {
-            mItemMaxAmount = Integer.parseInt(br.readLine());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mItemMaxAmount = GameEngine.choiceToInt();
     }
 
     public String getName() {
@@ -50,8 +41,10 @@ public class Jar {
             while ((line = br.readLine()) != null) {
                 String[] args = line.split("\\|");
                 setName(args[0]);
-                setMaxAmount(Integer.parseInt(args[1]));
+                setMaxAmount(Integer.parseInt(args[1].replaceAll("[\\D]", "")));
             }
+        } catch (FileNotFoundException e) {
+            System.out.printf("Could not find file name \"%s\". A new file will be created after safely closing this game.%n",fileName);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
