@@ -1,6 +1,7 @@
 package com.teamtreehouse.jargame;
 
 import java.io.*;
+import java.util.Random;
 
 public class Jar {
     private String mItemName;
@@ -59,6 +60,12 @@ public class Jar {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+    }
+
+    public int fill() {
+        Random random = new Random();
+        int number = random.nextInt(getMaxAmount() - 1) + 1; //This causes the number to never be 0
+        return number;
     }
 }
 

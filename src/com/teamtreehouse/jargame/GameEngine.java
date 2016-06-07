@@ -5,10 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class GameEngine {
-    private static Jar jar = new Jar();
+    private Jar jar = new Jar();
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private UserList userList;
     private Map<String, String> gameMenu;
@@ -251,8 +250,7 @@ public class GameEngine {
     }
 
     public int startGuessing(User user) {
-        Random random = new Random();
-        int number = random.nextInt(jar.getMaxAmount() - 1) + 1; //This causes the number to never be 0
+        int number = jar.fill();
         int guess = 0;
         int numberOfGuesses = 0;
         System.out.printf("Try to guess how many %s are in the jar! (There is a max of %d)%n", jar.getName(), jar.getMaxAmount());
