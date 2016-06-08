@@ -1,4 +1,4 @@
-package com.teamtreehouse.jargame;
+package com.teamtreehouse.jargame.engine;
 
 import java.io.*;
 import java.util.Random;
@@ -21,18 +21,20 @@ public class Jar {
         return mItemName;
     }
 
-    private void setName(String name) {
-        mItemName = name;
-    }
-
     public int getMaxAmount() {
         return mItemMaxAmount;
     }
 
+    /*These two private voids are separate from the public ones about strictly for the
+    purpose of importing/exporting the Jar for continued use.*/
+    private void setName(String name) {
+        mItemName = name;
+    }
     private void setMaxAmount(int amount) {
         mItemMaxAmount = amount;
     }
 
+    //Imports information from a file to supply the name and max amount from a previous jar
     public void importJar(String fileName) {
         try (
                 FileInputStream fis = new FileInputStream(fileName);
@@ -51,6 +53,7 @@ public class Jar {
         }
     }
 
+    //Allows the jar info from the game to be exported and used for a later compilation of the game
     public void exportJar(String fileName) {
         try (
                 FileOutputStream fos = new FileOutputStream(fileName);
@@ -62,10 +65,10 @@ public class Jar {
         }
     }
 
+    //Gets the random number to be used for guessing
     public int fill() {
         Random random = new Random();
-        int number = random.nextInt(getMaxAmount() - 1) + 1; //This causes the number to never be 0
-        return number;
+        return random.nextInt(getMaxAmount() - 1) + 1; //This causes the number to never be 0
     }
 }
 

@@ -1,20 +1,23 @@
-package com.teamtreehouse.jargame;
+package com.teamtreehouse.jargame.engine;
 
 
 import java.io.*;
 import java.util.*;
 
 public class UserList {
+    //I chose a map so that the users and high scores could always be connected
     private Map<String, Integer> mUserList;
 
     public UserList() {
         mUserList = new HashMap<>();
     }
 
+    //A map also allows for no two users to have the same name (case-sensitive however)
     public void addUser(User user) {
         mUserList.put(user.getName(), user.getHighScore());
     }
 
+    //Imports users from previous game compilations
     public void importList(String fileName) {
         try (
                 FileInputStream fis = new FileInputStream(fileName);
@@ -32,6 +35,8 @@ public class UserList {
         }
     }
 
+    //Exports users to be used in future game compilations.
+    //It warned of a MalformedFormatString, and I'm not sure why. So I suppressed it.
     @SuppressWarnings("MalformedFormatString")
     public void exportList(String fileName) {
         try (
@@ -53,6 +58,7 @@ public class UserList {
         return mUserList;
     }
 
+    //This method sorts the map into a leaderboard. (Future java versions HAVE to make this easier)
     public Map<String, Integer> leaderboard(Map<String, Integer> userList) {
         List<Map.Entry<String, Integer>> listOfUsers = new LinkedList<>(userList.entrySet());
         Collections.sort(listOfUsers, new Comparator<Map.Entry<String, Integer>>() {

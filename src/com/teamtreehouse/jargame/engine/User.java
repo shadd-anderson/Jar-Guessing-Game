@@ -1,4 +1,4 @@
-package com.teamtreehouse.jargame;
+package com.teamtreehouse.jargame.engine;
 
 public class User {
     private String name;
@@ -20,4 +20,7 @@ public class User {
     public void setHighScore(int highScore) {
         this.highScore = highScore;
     }
+
+    /*There is no "setName" method here, because another method in the GameEngine allows for creation
+    of a new user if one does not exist*/
 }

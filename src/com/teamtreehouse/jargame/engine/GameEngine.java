@@ -1,4 +1,4 @@
-package com.teamtreehouse.jargame;
+package com.teamtreehouse.jargame.engine;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,6 +35,8 @@ public class GameEngine {
         playerMenu.put("4", "Go back to the main menu");
     }
 
+    /*Since there's a lot of user-input, I put this in its own method to avoid code stink.
+    I made it static so it can be used in other classes.*/
     public static String readLine() {
         String line = "";
         try {
@@ -45,9 +47,11 @@ public class GameEngine {
         return line;
     }
 
+    //Another case of avoiding code stink. This is for converting a guess into an int.
     public static int choiceToInt() {
         int guess = 0;
         try {
+            //Splits the String from the user input into only numbers.
             guess = Integer.parseInt(readLine().replaceAll("[\\D]", ""));
         } catch (NumberFormatException nfe) {
             System.out.println("That's not a number!");
@@ -55,15 +59,18 @@ public class GameEngine {
         return guess;
     }
 
+    //Code stink stinks
     private void enter() {
         System.out.println("Please press enter to continue");
         readLine();
     }
 
+    //Sometimes code stink stinks really bad
     private String choiceTrimmer() {
         return readLine().trim().toLowerCase();
     }
 
+    //Separate choice-making methods for the 3 different menus (Main, Admin, and User)
     private String promptMainMenuChoice() {
         System.out.println("Welcome to the jar game! Here are the different kinds of users:");
         for (Map.Entry<String, String> option : gameMenu.entrySet()) {
@@ -95,6 +102,7 @@ public class GameEngine {
         return choiceTrimmer();
     }
 
+    //Starts up the main menu after first making sure a jar has already been set up. Sets one up if not
     public void run() {
         jar.importJar("Jar");
         if (jar.getName() == null) {
@@ -122,6 +130,7 @@ public class GameEngine {
         } while (!choice.equals("3"));
     }
 
+    //The various choices the admin can do.
     private void adminMenuSwitch() {
         String choice = "";
         do {
@@ -196,6 +205,8 @@ public class GameEngine {
 
     }
 
+    /*Method used to define current user. When first logging in, and when changing users,
+    this method is called. It adds the user to the user list if it hasn't already*/
     private User selectUser() {
         System.out.printf("%n%nThe following players have already signed up to play:%n");
         for (Map.Entry player : userList.getUserList().entrySet()) {
@@ -210,6 +221,7 @@ public class GameEngine {
         return new User(name, userList.getUserList().get(name));
     }
 
+    //Menu switch for the player
     private void playerMenuSwitch() {
         User user = selectUser();
         String choice;
@@ -244,11 +256,13 @@ public class GameEngine {
         } while (!choice.equals("4"));
     }
 
+    //Used if a jar isn't already created from earlier
     public void setUpJar() {
         jar.setName();
         jar.setMaxAmount();
     }
 
+    //The actual guessing game itself
     public int startGuessing(User user) {
         int number = jar.fill();
         int guess = 0;
@@ -276,6 +290,8 @@ public class GameEngine {
                         "We haven't counted this as a guess. Try again!%n", jar.getMaxAmount());
             }
         } while (guess != number);
+        /*Below lets the user know whether or not he beat his personal high score,
+        as well as (at least tied) the global high score*/
         System.out.printf("That's correct! There were %d %s in the jar. It only took you %d guess(es)!%n", number, jar.getName(), numberOfGuesses);
         if (numberOfGuesses < user.getHighScore() || user.getHighScore() == -1) {
             System.out.println("You set a new personal high score!");
@@ -292,6 +308,7 @@ public class GameEngine {
         }
     }
 
+    //When a new user is created, it auto-assigns a value of -1 to the high score. This is used as my "null"
     public User createUser(String name) {
         return new User(name, -1);
     }
