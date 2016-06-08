@@ -7,6 +7,11 @@ public class Jar {
     private String mItemName;
     private int mItemMaxAmount;
 
+    public Jar(String name, int maxAmount) {
+        name = mItemName;
+        maxAmount = mItemMaxAmount;
+    }
+
     public void setName() {
         System.out.println("Please enter the item to be put in the jar:");
         mItemName = GameEngine.readLine();

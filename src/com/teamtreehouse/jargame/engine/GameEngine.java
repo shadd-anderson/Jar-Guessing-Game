@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameEngine {
-    private Jar jar = new Jar();
+    //Jar initialized with nothing, because the name and max amount are changed before the game ever gets started
+    private Jar jar = new Jar("",0);
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private UserList userList;
     private Map<String, String> gameMenu;
@@ -59,13 +60,13 @@ public class GameEngine {
         return guess;
     }
 
-    //Code stink stinks
+    //A repeatable method for waiting for the user to press enter to continue
     private void enter() {
         System.out.println("Please press enter to continue");
         readLine();
     }
 
-    //Sometimes code stink stinks really bad
+    //Takes the user input and puts it to lowercase, ignoring spaces before and after input
     private String choiceTrimmer() {
         return readLine().trim().toLowerCase();
     }
